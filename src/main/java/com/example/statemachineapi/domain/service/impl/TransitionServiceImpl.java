@@ -1,15 +1,15 @@
 package com.example.statemachineapi.domain.service.impl;
 
+import com.example.statemachineapi.adapter.entrypoint.dto.CreateTransitionRequestDTO;
+import com.example.statemachineapi.adapter.entrypoint.dto.TransitionResponseDTO;
+import com.example.statemachineapi.adapter.entrypoint.mapper.TransitionMapper;
+import com.example.statemachineapi.adapter.repository.StateMachineRepository;
+import com.example.statemachineapi.adapter.repository.StatusRepository;
+import com.example.statemachineapi.adapter.repository.TransitionRepository;
 import com.example.statemachineapi.domain.model.StateMachineModel;
 import com.example.statemachineapi.domain.model.StatusModel;
 import com.example.statemachineapi.domain.model.TransitionModel;
 import com.example.statemachineapi.domain.service.TransitionService;
-import com.example.statemachineapi.entrypoint.dto.CreateTransitionRequestDTO;
-import com.example.statemachineapi.entrypoint.dto.TransitionResponseDTO;
-import com.example.statemachineapi.entrypoint.mapper.TransitionMapper;
-import com.example.statemachineapi.repository.StateMachineRepository;
-import com.example.statemachineapi.repository.StatusRepository;
-import com.example.statemachineapi.repository.TransitionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,36 +18,31 @@ import java.util.UUID;
 @Service
 public class TransitionServiceImpl implements TransitionService {
     @Autowired
-    private StateMachineRepository smRepo;
+    private StateMachineRepository stateMachineRepository;
+
     @Autowired
-    private StatusRepository statusRepo;
+    private StatusRepository statusRepository;
+
     @Autowired
-    private TransitionRepository repo;
+    private TransitionRepository transitionRepository;
+
     @Autowired
     private TransitionMapper mapper;
 
     @Override
-    public TransitionResponseDTO create(CreateTransitionRequestDTO dto) {
-        StateMachineModel sm = smRepo.findById(dto.getStateMachineId()).orElseThrow();
-        StatusModel src = statusRepo.findById(dto.getSourceStatusId()).orElseThrow();
-        StatusModel tgt = statusRepo.findById(dto.getTargetStatusId()).orElseThrow();
-        TransitionModel model = mapper.toModel(dto);
-        model.setStateMachine(sm);
-        model.setSourceStatus(src);
-        model.setTargetStatus(tgt);
-        model.setIsActive(true);
-        return mapper.toDto(repo.save(model));
+    public TransitionResponseDTO create(UUID stateMachineId, CreateTransitionRequestDTO dto) {
+        StateMachineModel stateMachine = stateMachineRepository.findById(stateMachineId).orElseThrow();
+        StatusModel statusSource = statusRepository.findById(dto.getSourceStatusId()).orElseThrow();
+        StatusModel statusTarget = statusRepository.findById(dto.getTargetStatusId()).orElseThrow();
+        TransitionModel transition = mapper.toModel(dto);
+        transition.setStateMachine(stateMachine);
+        transition.setSourceStatus(statusSource);
+        transition.setTargetStatus(statusTarget);
+        return mapper.toDto(transitionRepository.save(transition));
     }
 
     @Override
-    public TransitionResponseDTO getById(UUID id) {
-        return mapper.toDto(repo.findById(id).orElseThrow());
-    }
-
-    @Override
-    public TransitionResponseDTO disable(UUID id) {
-        TransitionModel m = repo.findById(id).orElseThrow();
-        m.setIsActive(false);
-        return mapper.toDto(repo.save(m));
+    public TransitionResponseDTO getById(UUID stateMachineId, UUID id) {
+        return mapper.toDto(transitionRepository.findById(id).orElseThrow());
     }
 }

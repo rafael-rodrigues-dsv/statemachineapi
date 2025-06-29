@@ -1,4 +1,4 @@
-package com.example.statemachineapi.repository;
+package com.example.statemachineapi.adapter.repository;
 
 import com.example.statemachineapi.domain.model.EventModel;
 import org.springframework.data.jpa.repository.JpaRepository;

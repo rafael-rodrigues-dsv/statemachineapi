@@ -28,5 +28,4 @@ public class StatusModel {
     private StateMachineModel stateMachine;
     private String name;
     private Boolean isInitial;
-    private Boolean isActive;
 }

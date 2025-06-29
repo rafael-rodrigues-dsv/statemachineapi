@@ -23,6 +23,7 @@ public class TransitionModel {
     @Id
     @GeneratedValue
     private UUID id;
+
     @ManyToOne
     @JoinColumn(name = "state_machine_id")
     private StateMachineModel stateMachine;
@@ -34,5 +35,4 @@ public class TransitionModel {
     @ManyToOne
     @JoinColumn(name = "target_status_id")
     private StatusModel targetStatus;
-    private Boolean isActive;
 }

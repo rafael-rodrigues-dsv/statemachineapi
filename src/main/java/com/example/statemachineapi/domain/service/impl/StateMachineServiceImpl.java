@@ -2,10 +2,10 @@ package com.example.statemachineapi.domain.service.impl;
 
 import com.example.statemachineapi.domain.model.StateMachineModel;
 import com.example.statemachineapi.domain.service.StateMachineService;
-import com.example.statemachineapi.entrypoint.dto.CreateStateMachineRequestDTO;
-import com.example.statemachineapi.entrypoint.dto.StateMachineDataResponseDTO;
-import com.example.statemachineapi.entrypoint.mapper.StateMachineDataMapper;
-import com.example.statemachineapi.repository.StateMachineRepository;
+import com.example.statemachineapi.adapter.entrypoint.dto.CreateStateMachineRequestDTO;
+import com.example.statemachineapi.adapter.entrypoint.dto.StateMachineDataResponseDTO;
+import com.example.statemachineapi.adapter.entrypoint.mapper.StateMachineDataMapper;
+import com.example.statemachineapi.adapter.repository.StateMachineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,21 +15,22 @@ import java.util.UUID;
 @Service
 public class StateMachineServiceImpl implements StateMachineService {
     @Autowired
-    private StateMachineRepository repo;
+    private StateMachineRepository stateMachineRepository;
+
     @Autowired
     private StateMachineDataMapper mapper;
 
     @Override
     public StateMachineDataResponseDTO create(CreateStateMachineRequestDTO dto) {
-        StateMachineModel model = mapper.toModel(dto);
-        model.setIsActive(true);
-        StateMachineModel saved = repo.save(model);
+        StateMachineModel stateMachine = mapper.toModel(dto);
+        stateMachine.setIsActive(true);
+        StateMachineModel saved = stateMachineRepository.save(stateMachine);
         return mapper.toDto(saved);
     }
 
     @Override
     public List<StateMachineDataResponseDTO> getAll() {
-        return repo.findAll()
+        return stateMachineRepository.findAll()
                 .stream()
                 .map(mapper::toDto)
                 .toList();
@@ -37,14 +38,13 @@ public class StateMachineServiceImpl implements StateMachineService {
 
     @Override
     public StateMachineDataResponseDTO getById(UUID id) {
-        StateMachineModel m = repo.findById(id).orElseThrow();
-        return mapper.toDto(m);
+        return mapper.toDto(stateMachineRepository.findById(id).orElseThrow());
     }
 
     @Override
     public StateMachineDataResponseDTO disable(UUID id) {
-        StateMachineModel m = repo.findById(id).orElseThrow();
-        m.setIsActive(false);
-        return mapper.toDto(repo.save(m));
+        StateMachineModel status = stateMachineRepository.findById(id).orElseThrow();
+        status.setIsActive(Boolean.FALSE);
+        return mapper.toDto(stateMachineRepository.save(status));
     }
 }
