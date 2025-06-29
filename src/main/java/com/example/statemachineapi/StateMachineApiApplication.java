@@ -1,0 +1,11 @@
+package com.example.statemachineapi;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class StateMachineApiApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(StateMachineApiApplication.class, args);
+    }
+}
