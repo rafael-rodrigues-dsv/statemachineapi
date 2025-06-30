@@ -1,8 +1,8 @@
 package com.example.statemachineapi.adapter.entrypoint.resource;
 
-import com.example.statemachineapi.adapter.entrypoint.dto.StatusResponseDTO;
 import com.example.statemachineapi.adapter.entrypoint.dto.TransitionResponseDTO;
 import com.example.statemachineapi.adapter.entrypoint.dto.error.ErrorDTO;
+import com.example.statemachineapi.adapter.entrypoint.mapper.TransitionMapper;
 import com.example.statemachineapi.domain.service.TransitionService;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,11 +32,15 @@ public class TransitionResource {
 
     @Autowired
     private final TransitionService service;
+    private final TransitionMapper mapper;
 
     @GetMapping
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = TransitionResponseDTO.class))))
     public ResponseEntity<List<TransitionResponseDTO>> getAll(@PathVariable("stateMachineId") UUID stateMachineId) {
-        List<TransitionResponseDTO> list = service.getAll(stateMachineId);
+        List<TransitionResponseDTO> list = service.getAll(stateMachineId)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
         return ResponseEntity.ok(list);
     }
 }

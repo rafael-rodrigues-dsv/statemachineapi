@@ -1,10 +1,12 @@
 package com.example.statemachineapi.domain.service;
 
-import com.example.statemachineapi.adapter.entrypoint.dto.StatusResponseDTO;
+import com.example.statemachineapi.domain.model.StatusModel;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface StatusService {
-    List<StatusResponseDTO> getAll(UUID stateMachineId);
+    StatusModel getInitialStatus(UUID stateMachineId);
+    StatusModel getById(UUID id);
+    List<StatusModel> getAll(UUID stateMachineId);
 }

@@ -2,6 +2,7 @@ package com.example.statemachineapi.adapter.entrypoint.resource;
 
 import com.example.statemachineapi.adapter.entrypoint.dto.StatusResponseDTO;
 import com.example.statemachineapi.adapter.entrypoint.dto.error.ErrorDTO;
+import com.example.statemachineapi.adapter.entrypoint.mapper.StatusMapper;
 import com.example.statemachineapi.domain.service.StatusService;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,11 +31,15 @@ import java.util.UUID;
 public class StatusResource {
 
     private final StatusService service;
+    private final StatusMapper mapper;
 
     @GetMapping
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = StatusResponseDTO.class))))
     public ResponseEntity<List<StatusResponseDTO>> getAll(@PathVariable("stateMachineId") UUID stateMachineId) {
-        List<StatusResponseDTO> list = service.getAll(stateMachineId);
+        List<StatusResponseDTO> list = service.getAll(stateMachineId)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
         return ResponseEntity.ok(list);
     }
 }

@@ -7,9 +7,6 @@
     +Boolean isActive
     +List<Status> statuses
     +List<Transition> transitions
-    +List<StateMachine> getAll()
-    +StateMachine getById(UUID id)
-    +void disable(UUID id)
   }
 
   ' Status
@@ -18,7 +15,6 @@
     +StateMachine stateMachine
     +String name
     +Boolean isInitial
-    +List<Status> getAll(UUID stateMachineId)
   }
 
   ' Transition
@@ -27,7 +23,6 @@
     +StateMachine stateMachine
     +Status sourceStatus
     +Status targetStatus
-    +List<Transition> getAll(UUID stateMachineId)
   }
 
   ' Event
@@ -35,10 +30,14 @@
     +UUID id
     +StateMachine stateMachine
     +Status status
-    +Event create(UUID stateMachineId)
-    +List<Event> getAll(UUID stateMachineId)
-    +Event getById(UUID stateMachineId, UUID id)
-    +void update(UUID stateMachineId, UUID id, Event event)
+  }
+
+  ' StateFlow
+  class EventFlow {
+    +UUID id
+    +Event event
+    +LocalDateTime createdAt
+    +List<EventFlow> getAll(UUID eventId)
   }
 
 ' Relações
@@ -46,5 +45,5 @@ StateMachine "1" -- "0..*" Status : statuses
 StateMachine "1" -- "0..*" Transition : transitions
 Status "0..*" -- "0..*" Transition : source/target
 StateMachine "1" -- "0..*" Event : events
-
+Event "1" -- "0..*" EventFlow : flows
 @enduml

@@ -1,0 +1,42 @@
+@startuml
+actor Confeiteiro
+participant "CakeService" as CakeSvc
+participant "Transition" as Transition
+participant "Status" as Status
+participant "Event" as Event
+
+== Separar Ingredientes ==
+Confeiteiro -> CakeSvc : separarIngredientes()
+CakeSvc -> Event : create()
+Event -> Status : setStatus(Ingredientes Separados)
+
+== Misturar Massa ==
+Confeiteiro -> CakeSvc : misturarMassa()
+CakeSvc -> Transition : validate(Ingredientes Separados → Massa Misturada)
+Transition -> Status : setStatus(Massa Misturada)
+CakeSvc -> Event : updateStatus(Massa Misturada)
+
+== Assar ==
+Confeiteiro -> CakeSvc : assar()
+CakeSvc -> Transition : validate(Massa Misturada → Assando)
+Transition -> Status : setStatus(Assando)
+CakeSvc -> Event : updateStatus(Assando)
+
+== Resfriar ==
+Confeiteiro -> CakeSvc : resfriar()
+CakeSvc -> Transition : validate(Assando → Resfriando)
+Transition -> Status : setStatus(Resfriando)
+CakeSvc -> Event : updateStatus(Resfriando)
+
+== Decorar ==
+Confeiteiro -> CakeSvc : decorar()
+CakeSvc -> Transition : validate(Resfriando → Decorado)
+Transition -> Status : setStatus(Decorado)
+CakeSvc -> Event : updateStatus(Decorado)
+
+== Servir (Pronto) ==
+Confeiteiro -> CakeSvc : servir()
+CakeSvc -> Transition : validate(Decorado → Pronto)
+Transition -> Status : setStatus(Pronto)
+CakeSvc -> Event : updateStatus(Pronto)
+@enduml

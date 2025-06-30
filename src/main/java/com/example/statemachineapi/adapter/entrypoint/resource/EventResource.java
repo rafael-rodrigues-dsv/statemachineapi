@@ -3,6 +3,9 @@ package com.example.statemachineapi.adapter.entrypoint.resource;
 import com.example.statemachineapi.adapter.entrypoint.dto.EventResponseDTO;
 import com.example.statemachineapi.adapter.entrypoint.dto.UpdateEventRequestDTO;
 import com.example.statemachineapi.adapter.entrypoint.dto.error.ErrorDTO;
+import com.example.statemachineapi.adapter.entrypoint.mapper.EventMapper;
+import com.example.statemachineapi.domain.model.EventModel;
+import com.example.statemachineapi.domain.model.StatusModel;
 import com.example.statemachineapi.domain.service.EventService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,30 +37,38 @@ import java.util.UUID;
 public class EventResource {
 
     private final EventService service;
+    private final EventMapper mapper;
 
     @PostMapping
     @ApiResponse(responseCode = "201", description = "Created", content = @Content(schema = @Schema(implementation = EventResponseDTO.class)))
     public ResponseEntity<EventResponseDTO> create(@PathVariable("stateMachineId") UUID stateMachineId) {
-        EventResponseDTO res = service.create(stateMachineId);
+        EventResponseDTO res = mapper.toDto(service.create(stateMachineId));
         return ResponseEntity.created(URI.create("/api/state-machines/" + stateMachineId + "/events/" + res.getId())).body(res);
     }
 
     @GetMapping
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = EventResponseDTO.class)))
     public ResponseEntity<List<EventResponseDTO>> getAll(@PathVariable("stateMachineId") UUID stateMachineId) {
-        List<EventResponseDTO> list = service.getAll(stateMachineId);
+        List<EventResponseDTO> list = service.getAll(stateMachineId)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = EventResponseDTO.class)))
     public EventResponseDTO get(@PathVariable("stateMachineId") UUID stateMachineId, @PathVariable UUID id) {
-        return service.getById(stateMachineId, id);
+        return mapper.toDto(service.getById(stateMachineId, id));
     }
 
     @PatchMapping("/{id}")
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = EventResponseDTO.class)))
     public EventResponseDTO update(@PathVariable("stateMachineId") UUID stateMachineId, @PathVariable("id") UUID id, @RequestBody UpdateEventRequestDTO dto) {
-        return service.update(stateMachineId, id, dto);
+        return mapper.toDto(service.update(stateMachineId, id, EventModel.builder()
+                .status(StatusModel.builder()
+                        .id(dto.getStatusId())
+                        .build())
+                .build()));
     }
 }

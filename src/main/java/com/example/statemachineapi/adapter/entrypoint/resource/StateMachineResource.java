@@ -1,8 +1,8 @@
 package com.example.statemachineapi.adapter.entrypoint.resource;
 
 import com.example.statemachineapi.adapter.entrypoint.dto.StateMachineResponseDTO;
-import com.example.statemachineapi.adapter.entrypoint.dto.TransitionResponseDTO;
 import com.example.statemachineapi.adapter.entrypoint.dto.error.ErrorDTO;
+import com.example.statemachineapi.adapter.entrypoint.mapper.StateMachineMapper;
 import com.example.statemachineapi.domain.service.StateMachineService;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,23 +31,27 @@ import java.util.UUID;
 public class StateMachineResource {
 
     private final StateMachineService service;
+    private final StateMachineMapper mapper;
 
     @GetMapping
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = StateMachineResponseDTO.class))))
     public ResponseEntity<List<StateMachineResponseDTO>> getAll() {
-        List<StateMachineResponseDTO> list = service.getAll();
+        List<StateMachineResponseDTO> list = service.getAll()
+                .stream()
+                .map(mapper::toDto)
+                .toList();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = StateMachineResponseDTO.class)))
     public StateMachineResponseDTO get(@PathVariable UUID id) {
-        return service.getById(id);
+        return mapper.toDto(service.getById(id));
     }
 
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = StateMachineResponseDTO.class)))
     public StateMachineResponseDTO disable(@PathVariable UUID id) {
-        return service.disable(id);
+        return mapper.toDto(service.disable(id));
     }
 }

@@ -1,12 +1,10 @@
 package com.example.statemachineapi.domain.service.impl;
 
-import com.example.statemachineapi.adapter.entrypoint.dto.TransitionResponseDTO;
-import com.example.statemachineapi.adapter.entrypoint.mapper.TransitionMapper;
-import com.example.statemachineapi.adapter.repository.StateMachineRepository;
-import com.example.statemachineapi.adapter.repository.TransitionRepository;
 import com.example.statemachineapi.domain.model.StateMachineModel;
+import com.example.statemachineapi.domain.model.TransitionModel;
+import com.example.statemachineapi.domain.service.StateMachineService;
 import com.example.statemachineapi.domain.service.TransitionService;
-import jakarta.persistence.EntityNotFoundException;
+import com.example.statemachineapi.repository.TransitionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,18 +16,16 @@ import java.util.UUID;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TransitionServiceImpl implements TransitionService {
 
-    private final StateMachineRepository stateMachineRepository;
+    private final StateMachineService stateMachineService;
     private final TransitionRepository transitionRepository;
-    private final TransitionMapper mapper;
 
     @Override
-    public List<TransitionResponseDTO> getAll(UUID stateMachineId) {
-        StateMachineModel stateMachine = stateMachineRepository.findById(stateMachineId).orElseThrow(() -> new EntityNotFoundException("State Machine not found with id " + stateMachineId));
+    public List<TransitionModel> getAll(UUID stateMachineId) {
+        StateMachineModel stateMachine = stateMachineService.getById(stateMachineId);
 
         return transitionRepository.findAll()
                 .stream()
                 .filter(filter -> filter.getStateMachine().equals(stateMachine))
-                .map(mapper::toDto)
                 .toList();
     }
 }

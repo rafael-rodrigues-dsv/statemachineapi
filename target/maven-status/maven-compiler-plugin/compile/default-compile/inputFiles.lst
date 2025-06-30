@@ -1,6 +1,8 @@
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\adapter\entrypoint\dto\EventResponseDTO.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\adapter\entrypoint\dto\StateMachineResponseDTO.java
+C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\domain\repository\EventFlowRepository.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\adapter\entrypoint\mapper\StatusMapper.java
+C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\domain\service\impl\EventFlowServiceImpl.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\domain\service\impl\TransitionServiceImpl.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\domain\model\StatusModel.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\domain\model\TransitionModel.java
@@ -19,11 +21,14 @@ C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\adapter\entrypo
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\adapter\entrypoint\dto\UpdateEventRequestDTO.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\domain\service\StateMachineService.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\StateMachineApiApplication.java
+C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\domain\model\EventFlowModel.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\domain\service\TransitionService.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\adapter\entrypoint\dto\StatusResponseDTO.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\domain\service\EventService.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\adapter\entrypoint\resource\StateMachineResource.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\adapter\configuration\SecurityConfig.java
+C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\adapter\entrypoint\dto\EventFlowResponseDTO.java
+C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\adapter\entrypoint\mapper\EventFlowMapper.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\domain\model\StateMachineModel.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\repository\TransitionRepository.java
 C:\GIT\statemachineapi\src\main\java\com\example\statemachineapi\adapter\entrypoint\mapper\TransitionMapper.java
