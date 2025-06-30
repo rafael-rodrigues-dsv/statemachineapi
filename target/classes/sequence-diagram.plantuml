@@ -1,9 +1,9 @@
 @startuml
 actor User
 participant "OrderService" as OrderService
-participant "StateMachineEvent" as Event
-participant "StateMachineStatus" as Status
-participant "StateMachineTransition" as Transition
+participant "Event" as Event
+participant "Status" as Status
+participant "Transition" as Transition
 
 == Criação do Pedido ==
 User -> OrderService : createOrder()

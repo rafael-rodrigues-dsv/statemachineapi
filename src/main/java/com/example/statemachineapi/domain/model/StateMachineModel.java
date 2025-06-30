@@ -26,6 +26,7 @@ public class StateMachineModel {
     @GeneratedValue
     private UUID id;
     private String name;
+    private String description;
     private Boolean isActive;
 
     @OneToMany(mappedBy = "stateMachine", cascade = CascadeType.ALL)

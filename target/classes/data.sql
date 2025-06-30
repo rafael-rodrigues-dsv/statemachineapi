@@ -1,6 +1,6 @@
 -- 1) Máquina de estado
-INSERT INTO state_machine(id, name, is_active)
-VALUES (RANDOM_UUID(), 'OrderLifecycle', TRUE);
+INSERT INTO state_machine(id, name, description, is_active)
+VALUES (RANDOM_UUID(), 'OrderLifecycle', 'Ciclo de vida de Pedido', TRUE);
 
 -- 2) Status
 INSERT INTO state_machine_status(id, state_machine_id, name, is_initial)

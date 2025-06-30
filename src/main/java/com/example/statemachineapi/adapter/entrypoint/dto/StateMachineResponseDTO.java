@@ -16,5 +16,6 @@ import java.util.UUID;
 public class StateMachineResponseDTO {
     private UUID id;
     private String name;
+    private String description;
     private Boolean isActive;
 }

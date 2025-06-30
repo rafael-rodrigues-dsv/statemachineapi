@@ -1,0 +1,50 @@
+@startuml
+  ' State Machine
+  class StateMachine {
+    +UUID id
+    +String name
+    +String description
+    +Boolean isActive
+    +List<Status> statuses
+    +List<Transition> transitions
+    +List<StateMachine> getAll()
+    +StateMachine getById(UUID id)
+    +void disable(UUID id)
+  }
+
+  ' Status
+  class Status {
+    +UUID id
+    +StateMachine stateMachine
+    +String name
+    +Boolean isInitial
+    +List<Status> getAll(UUID stateMachineId)
+  }
+
+  ' Transition
+  class Transition {
+    +UUID id
+    +StateMachine stateMachine
+    +Status sourceStatus
+    +Status targetStatus
+    +List<Transition> getAll(UUID stateMachineId)
+  }
+
+  ' Event
+  class Event {
+    +UUID id
+    +StateMachine stateMachine
+    +Status status
+    +Event create(UUID stateMachineId)
+    +List<Event> getAll(UUID stateMachineId)
+    +Event getById(UUID stateMachineId, UUID id)
+    +void update(UUID stateMachineId, UUID id, Event event)
+  }
+
+' Relações
+StateMachine "1" -- "0..*" Status : statuses
+StateMachine "1" -- "0..*" Transition : transitions
+Status "0..*" -- "0..*" Transition : source/target
+StateMachine "1" -- "0..*" Event : events
+
+@enduml

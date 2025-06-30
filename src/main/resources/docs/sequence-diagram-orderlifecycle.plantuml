@@ -1,0 +1,43 @@
+@startuml
+actor User
+participant "OrderService" as OrderService
+participant "Event" as Event
+participant "Status" as Status
+participant "Transition" as Transition
+
+== Criação do Pedido ==
+User -> OrderService : createOrder()
+OrderService -> Event : create()
+Event -> Status : setStatus(Criado)
+
+== Confirmação ==
+User -> OrderService : confirmOrder()
+OrderService -> Transition : validate(Criado → Confirmado)
+Transition -> Status : setStatus(Confirmado)
+OrderService -> Event : updateStatus(Confirmado)
+
+== Em Preparo ==
+User -> OrderService : prepareOrder()
+OrderService -> Transition : validate(Confirmado → Em Preparo)
+Transition -> Status : setStatus(Em Preparo)
+OrderService -> Event : updateStatus(Em Preparo)
+
+== Enviar ==
+User -> OrderService : sendOrder()
+OrderService -> Transition : validate(Em Preparo → Enviado)
+Transition -> Status : setStatus(Enviado)
+OrderService -> Event : updateStatus(Enviado)
+
+== Entregar ==
+User -> OrderService : deliverOrder()
+OrderService -> Transition : validate(Enviado → Entregue)
+Transition -> Status : setStatus(Entregue)
+OrderService -> Event : updateStatus(Entregue)
+
+== Finalizar/Cancelar ==
+User -> OrderService : finalizeOrder() or cancelOrder()
+OrderService -> Transition : validate(Entregue → Finalizado / Cancelado)
+Transition -> Status : setStatus(Finalizado / Cancelado)
+OrderService -> Event : updateStatus(Finalizado / Cancelado)
+
+@enduml
