@@ -1,35 +1,19 @@
 package com.example.statemachineapi.adapter.entrypoint.mapper;
 
-import com.example.statemachineapi.adapter.entrypoint.dto.CreateTransitionRequestDTO;
+import com.example.statemachineapi.adapter.entrypoint.dto.StatusResponseDTO;
 import com.example.statemachineapi.adapter.entrypoint.dto.TransitionResponseDTO;
+import com.example.statemachineapi.domain.model.StatusModel;
 import com.example.statemachineapi.domain.model.TransitionModel;
 import javax.annotation.processing.Generated;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-06-29T21:22:16-0300",
+    date = "2025-06-30T00:34:11-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.7 (Oracle Corporation)"
 )
 @Component
 public class TransitionMapperImpl implements TransitionMapper {
-
-    @Autowired
-    private StateMachineMapper stateMachineMapper;
-    @Autowired
-    private StatusMapper statusMapper;
-
-    @Override
-    public TransitionModel toModel(CreateTransitionRequestDTO dto) {
-        if ( dto == null ) {
-            return null;
-        }
-
-        TransitionModel.TransitionModelBuilder transitionModel = TransitionModel.builder();
-
-        return transitionModel.build();
-    }
 
     @Override
     public TransitionResponseDTO toDto(TransitionModel model) {
@@ -37,13 +21,26 @@ public class TransitionMapperImpl implements TransitionMapper {
             return null;
         }
 
-        TransitionResponseDTO transitionResponseDTO = new TransitionResponseDTO();
+        TransitionResponseDTO.TransitionResponseDTOBuilder transitionResponseDTO = TransitionResponseDTO.builder();
 
-        transitionResponseDTO.setId( model.getId() );
-        transitionResponseDTO.setStateMachine( stateMachineMapper.toDto( model.getStateMachine() ) );
-        transitionResponseDTO.setSourceStatus( statusMapper.toDto( model.getSourceStatus() ) );
-        transitionResponseDTO.setTargetStatus( statusMapper.toDto( model.getTargetStatus() ) );
+        transitionResponseDTO.id( model.getId() );
+        transitionResponseDTO.sourceStatus( statusModelToStatusResponseDTO( model.getSourceStatus() ) );
+        transitionResponseDTO.targetStatus( statusModelToStatusResponseDTO( model.getTargetStatus() ) );
 
-        return transitionResponseDTO;
+        return transitionResponseDTO.build();
+    }
+
+    protected StatusResponseDTO statusModelToStatusResponseDTO(StatusModel statusModel) {
+        if ( statusModel == null ) {
+            return null;
+        }
+
+        StatusResponseDTO.StatusResponseDTOBuilder statusResponseDTO = StatusResponseDTO.builder();
+
+        statusResponseDTO.id( statusModel.getId() );
+        statusResponseDTO.name( statusModel.getName() );
+        statusResponseDTO.isInitial( statusModel.getIsInitial() );
+
+        return statusResponseDTO.build();
     }
 }

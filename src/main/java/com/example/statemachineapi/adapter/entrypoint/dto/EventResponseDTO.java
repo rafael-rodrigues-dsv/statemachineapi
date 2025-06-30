@@ -1,12 +1,19 @@
 package com.example.statemachineapi.adapter.entrypoint.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Getter
+@Setter
 public class EventResponseDTO {
     private UUID id;
-    private StateMachineResponseDTO stateMachine;
     private StatusResponseDTO status;
 }

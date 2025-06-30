@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-06-29T21:22:01-0300",
+    date = "2025-06-30T00:36:09-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.7 (Oracle Corporation)"
 )
 @Component
@@ -19,12 +19,12 @@ public class StateMachineMapperImpl implements StateMachineMapper {
             return null;
         }
 
-        StateMachineResponseDTO stateMachineResponseDTO = new StateMachineResponseDTO();
+        StateMachineResponseDTO.StateMachineResponseDTOBuilder stateMachineResponseDTO = StateMachineResponseDTO.builder();
 
-        stateMachineResponseDTO.setId( model.getId() );
-        stateMachineResponseDTO.setName( model.getName() );
-        stateMachineResponseDTO.setIsActive( model.getIsActive() );
+        stateMachineResponseDTO.id( model.getId() );
+        stateMachineResponseDTO.name( model.getName() );
+        stateMachineResponseDTO.isActive( model.getIsActive() );
 
-        return stateMachineResponseDTO;
+        return stateMachineResponseDTO.build();
     }
 }

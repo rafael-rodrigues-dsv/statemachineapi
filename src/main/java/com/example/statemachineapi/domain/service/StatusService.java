@@ -1,11 +1,10 @@
 package com.example.statemachineapi.domain.service;
 
-import com.example.statemachineapi.adapter.entrypoint.dto.CreateStatusRequestDTO;
-import com.example.statemachineapi.adapter.entrypoint.dto.StatusDataResponseDTO;
+import com.example.statemachineapi.adapter.entrypoint.dto.StatusResponseDTO;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface StatusService {
-    StatusDataResponseDTO create(UUID stateMachineId, CreateStatusRequestDTO dto);
-    StatusDataResponseDTO getById(UUID stateMachineId, UUID id);
+    List<StatusResponseDTO> getAll(UUID stateMachineId);
 }

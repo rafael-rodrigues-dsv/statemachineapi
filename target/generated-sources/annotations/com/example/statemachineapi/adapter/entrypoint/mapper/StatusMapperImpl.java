@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-06-29T21:22:01-0300",
+    date = "2025-06-30T00:34:11-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.7 (Oracle Corporation)"
 )
 @Component
@@ -19,12 +19,12 @@ public class StatusMapperImpl implements StatusMapper {
             return null;
         }
 
-        StatusResponseDTO statusResponseDTO = new StatusResponseDTO();
+        StatusResponseDTO.StatusResponseDTOBuilder statusResponseDTO = StatusResponseDTO.builder();
 
-        statusResponseDTO.setId( model.getId() );
-        statusResponseDTO.setName( model.getName() );
-        statusResponseDTO.setIsInitial( model.getIsInitial() );
+        statusResponseDTO.id( model.getId() );
+        statusResponseDTO.name( model.getName() );
+        statusResponseDTO.isInitial( model.getIsInitial() );
 
-        return statusResponseDTO;
+        return statusResponseDTO.build();
     }
 }

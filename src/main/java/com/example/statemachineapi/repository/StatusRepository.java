@@ -9,7 +9,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface StatusRepository extends JpaRepository<StatusModel, UUID> {
-    List<StatusModel> findByStateMachine(StateMachineModel sm);
-
     Optional<StatusModel> findByStateMachineAndIsInitialTrue(StateMachineModel sm);
 }

@@ -1,38 +1,35 @@
 package com.example.statemachineapi.domain.service.impl;
 
-import com.example.statemachineapi.domain.model.StateMachineModel;
-import com.example.statemachineapi.domain.model.StatusModel;
-import com.example.statemachineapi.domain.service.StatusService;
-import com.example.statemachineapi.adapter.entrypoint.dto.CreateStatusRequestDTO;
-import com.example.statemachineapi.adapter.entrypoint.dto.StatusDataResponseDTO;
-import com.example.statemachineapi.adapter.entrypoint.mapper.StatusDataMapper;
+import com.example.statemachineapi.adapter.entrypoint.dto.StatusResponseDTO;
+import com.example.statemachineapi.adapter.entrypoint.mapper.StatusMapper;
 import com.example.statemachineapi.adapter.repository.StateMachineRepository;
 import com.example.statemachineapi.adapter.repository.StatusRepository;
+import com.example.statemachineapi.domain.model.StateMachineModel;
+import com.example.statemachineapi.domain.service.StatusService;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StatusServiceImpl implements StatusService {
-    @Autowired
-    private StateMachineRepository stateMachineRepository;
-    @Autowired
-    private StatusRepository statusRepository;
-    @Autowired
-    private StatusDataMapper mapper;
+
+    private final StateMachineRepository stateMachineRepository;
+    private final StatusRepository statusRepository;
+    private final StatusMapper mapper;
 
     @Override
-    public StatusDataResponseDTO create(UUID stateMachineId, CreateStatusRequestDTO dto) {
-        StateMachineModel sm = stateMachineRepository.findById(stateMachineId).orElseThrow();
-        StatusModel model = mapper.toModel(dto);
-        model.setStateMachine(sm);
-        StatusModel saved = statusRepository.save(model);
-        return mapper.toDto(saved);
-    }
+    public List<StatusResponseDTO> getAll(UUID stateMachineId) {
+        StateMachineModel stateMachine = stateMachineRepository.findById(stateMachineId).orElseThrow(() -> new EntityNotFoundException("State Machine not found with id " + stateMachineId));
 
-    @Override
-    public StatusDataResponseDTO getById(UUID stateMachineId, UUID id) {
-        return mapper.toDto(statusRepository.findById(id).orElseThrow());
+        return statusRepository.findAll()
+                .stream()
+                .filter(filter -> filter.getStateMachine().equals(stateMachine))
+                .map(mapper::toDto)
+                .toList();
     }
 }
