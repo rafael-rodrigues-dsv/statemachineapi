@@ -1,0 +1,36 @@
+@startuml
+actor Solicitante
+participant "ServiceOrderService" as SOSvc
+participant "Transition" as Transition
+participant "Status" as Status
+participant "Event" as Event
+
+== Abrir Ordem ==
+Solicitante -> SOSvc : abrirOrdem()
+SOSvc -> Event : create()
+Event -> Status : setStatus(Aberta)
+
+== Iniciar Trabalho ==
+Solicitante -> SOSvc : iniciarOrdem()
+SOSvc -> Transition : validate(Aberta → Em andamento)
+Transition -> Status : setStatus(Em andamento)
+SOSvc -> Event : updateStatus(Em andamento)
+
+== Aguardar Peças ==
+Solicitante -> SOSvc : solicitarPecas()
+SOSvc -> Transition : validate(Em andamento → Aguardando peças)
+Transition -> Status : setStatus(Aguardando peças)
+SOSvc -> Event : updateStatus(Aguardando peças)
+
+== Concluir Ordem ==
+Solicitante -> SOSvc : concluirOrdem()
+SOSvc -> Transition : validate(Em andamento → Concluída)
+Transition -> Status : setStatus(Concluída)
+SOSvc -> Event : updateStatus(Concluída)
+
+== Cancelar Ordem ==
+Solicitante -> SOSvc : cancelarOrdem()
+SOSvc -> Transition : validate(Aberta → Cancelada) or validate(Em andamento → Cancelada) or validate(Aguardando peças → Cancelada)
+Transition -> Status : setStatus(Cancelada)
+SOSvc -> Event : updateStatus(Cancelada)
+@enduml

@@ -1,0 +1,43 @@
+@startuml
+actor Passageiro
+participant "FlightService" as FlightService
+participant "Transition" as Transition
+participant "Status" as Status
+participant "Event" as Event
+
+== Agendamento de Voo ==
+Passageiro -> FlightService : agendarVoo()
+FlightService -> Event : create()
+Event -> Status : setStatus(Agendado)
+
+== Abertura de Check-in ==
+Passageiro -> FlightService : abrirCheckin()
+FlightService -> Transition : validate(Agendado → Check-in aberto)
+Transition -> Status : setStatus(Check-in aberto)
+FlightService -> Event : updateStatus(Check-in aberto)
+
+== Fazer Check-in ==
+Passageiro -> FlightService : fazerCheckin()
+FlightService -> Transition : validate(Check-in aberto → Check-in feito)
+Transition -> Status : setStatus(Check-in feito)
+FlightService -> Event : updateStatus(Check-in feito)
+
+== Embarque ==
+Passageiro -> FlightService : embarcar()
+FlightService -> Transition : validate(Check-in feito → Embarcado)
+Transition -> Status : setStatus(Embarcado)
+FlightService -> Event : updateStatus(Embarcado)
+
+== Conclusão do Voo ==
+Passageiro -> FlightService : concluirVoo()
+FlightService -> Transition : validate(Embarcado → Concluído)
+Transition -> Status : setStatus(Concluído)
+FlightService -> Event : updateStatus(Concluído)
+
+== Passagem Perdida ==
+Passageiro -> FlightService : reportarPerdido()
+FlightService -> Transition : validate(Embarcado → Perdido)
+Transition -> Status : setStatus(Perdido)
+FlightService -> Event : updateStatus(Perdido)
+
+@enduml

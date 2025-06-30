@@ -1,0 +1,32 @@
+@startuml
+actor Jogador
+participant "GameService" as GameService
+participant "Transition" as Transition
+participant "Status" as Status
+participant "Event" as Event
+
+== Iniciar Jogo ==
+Jogador -> GameService : iniciarJogo()
+GameService -> Transition : validate(Menu → Jogando)
+Transition -> Status : setStatus(Jogando)
+GameService -> Event : updateStatus(Jogando)
+
+== Pausar ==
+Jogador -> GameService : pausarJogo()
+GameService -> Transition : validate(Jogando → Pausado)
+Transition -> Status : setStatus(Pausado)
+GameService -> Event : updateStatus(Pausado)
+
+== Morrer ==
+Jogador -> GameService : morrer()
+GameService -> Transition : validate(Jogando → Game Over)
+Transition -> Status : setStatus(Game Over)
+GameService -> Event : updateStatus(Game Over)
+
+== Reiniciar ==
+Jogador -> GameService : reiniciarJogo()
+GameService -> Transition : validate(Game Over → Menu)
+Transition -> Status : setStatus(Menu)
+GameService -> Event : updateStatus(Menu)
+
+@enduml

@@ -1,0 +1,36 @@
+@startuml
+actor Usuário
+participant "WizardService" as WizSvc
+participant "Transition" as Transition
+participant "Status" as Status
+participant "Event" as Event
+
+== Início no Wizard ==
+Usuário -> WizSvc : startWizard()
+WizSvc -> Event : create()
+Event -> Status : setStatus(Etapa 1)
+
+== Avançar para Endereço ==
+Usuário -> WizSvc : next()
+WizSvc -> Transition : validate(Etapa 1 → Etapa 2)
+Transition -> Status : setStatus(Etapa 2)
+WizSvc -> Event : updateStatus(Etapa 2)
+
+== Voltar para Dados Pessoais ==
+Usuário -> WizSvc : back()
+WizSvc -> Transition : validate(Etapa 2 → Etapa 1)
+Transition -> Status : setStatus(Etapa 1)
+WizSvc -> Event : updateStatus(Etapa 1)
+
+== Avançar para Confirmação ==
+Usuário -> WizSvc : next()
+WizSvc -> Transition : validate(Etapa 2 → Etapa 3)
+Transition -> Status : setStatus(Etapa 3)
+WizSvc -> Event : updateStatus(Etapa 3)
+
+== Cancelar Wizard ==
+Usuário -> WizSvc : cancel()
+WizSvc -> Transition : validate(any → Cancelado)
+Transition -> Status : setStatus(Cancelado)
+WizSvc -> Event : updateStatus(Cancelado)
+@enduml

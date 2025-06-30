@@ -1,0 +1,25 @@
+@startuml
+actor Sistema
+participant "TrafficLightService" as TLSvc
+participant "Transition" as Transition
+participant "Status" as Status
+participant "Event" as Event
+
+== Verde → Amarelo ==
+Sistema -> TLSvc : next()
+TLSvc -> Transition : validate(Verde → Amarelo)
+Transition -> Status : setStatus(Amarelo)
+TLSvc -> Event : updateStatus(Amarelo)
+
+== Amarelo → Vermelho ==
+Sistema -> TLSvc : next()
+TLSvc -> Transition : validate(Amarelo → Vermelho)
+Transition -> Status : setStatus(Vermelho)
+TLSvc -> Event : updateStatus(Vermelho)
+
+== Vermelho → Verde ==
+Sistema -> TLSvc : next()
+TLSvc -> Transition : validate(Vermelho → Verde)
+Transition -> Status : setStatus(Verde)
+TLSvc -> Event : updateStatus(Verde)
+@enduml

@@ -1,0 +1,36 @@
+@startuml
+actor Usuário
+participant "ChatbotService" as BotSvc
+participant "Transition" as Transition
+participant "Status" as Status
+participant "Event" as Event
+
+== Saudação ==
+Usuário -> BotSvc : startChat()
+BotSvc -> Event : create()
+Event -> Status : setStatus(Saudação)
+
+== Perguntar ==
+Usuário -> BotSvc : askQuestion(text)
+BotSvc -> Transition : validate(Saudação → Pergunta)
+Transition -> Status : setStatus(Pergunta)
+BotSvc -> Event : updateStatus(Pergunta)
+
+== Responder ==
+BotSvc -> Usuário : deliverAnswer(answer)
+BotSvc -> Transition : validate(Pergunta → Resposta)
+Transition -> Status : setStatus(Resposta)
+BotSvc -> Event : updateStatus(Resposta)
+
+== Ação Tomada ==
+Usuário -> BotSvc : takeAction(cmd)
+BotSvc -> Transition : validate(Resposta → Ação tomada)
+Transition -> Status : setStatus(Ação tomada)
+BotSvc -> Event : updateStatus(Ação tomada)
+
+== Encerrar ==
+Usuário -> BotSvc : endChat()
+BotSvc -> Transition : validate(Ação tomada → Encerrado)
+Transition -> Status : setStatus(Encerrado)
+BotSvc -> Event : updateStatus(Encerrado)
+@enduml

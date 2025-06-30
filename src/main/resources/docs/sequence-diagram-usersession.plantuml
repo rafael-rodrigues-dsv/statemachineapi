@@ -1,0 +1,31 @@
+@startuml
+actor Usuário
+participant "AuthService" as AuthService
+participant "Transition" as Transition
+participant "Status" as Status
+participant "Event" as Event
+
+== Iniciar Login ==
+Usuário -> AuthService : iniciarLogin(credentials)
+AuthService -> Transition : validate(Deslogado → Logando)
+Transition -> Status : setStatus(Logando)
+AuthService -> Event : updateStatus(Logando)
+
+== Login Bem-Sucedido ==
+Usuário <- AuthService : loginSuccess()
+AuthService -> Transition : validate(Logando → Logado)
+Transition -> Status : setStatus(Logado)
+AuthService -> Event : updateStatus(Logado)
+
+== Sessão Expira ==
+System -> AuthService : sessionTimeout()
+AuthService -> Transition : validate(Logado → Sessão expirada)
+Transition -> Status : setStatus(Sessão expirada)
+AuthService -> Event : updateStatus(Sessão expirada)
+
+== Voltar ao Estado Inicial ==
+Usuário -> AuthService : reiniciarSessão()
+AuthService -> Transition : validate(Sessão expirada → Deslogado)
+Transition -> Status : setStatus(Deslogado)
+AuthService -> Event : updateStatus(Deslogado)
+@enduml

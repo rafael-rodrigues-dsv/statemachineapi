@@ -1,0 +1,43 @@
+@startuml
+actor Usuário
+participant "InvoiceService" as InvoiceService
+participant "Transition" as Transition
+participant "Status" as Status
+participant "Event" as Event
+
+== Criação de Fatura ==
+Usuário -> InvoiceService : criarFatura()
+InvoiceService -> Event : create()
+Event -> Status : setStatus(Criado)
+
+== Enviar Fatura ==
+Usuário -> InvoiceService : enviarFatura()
+InvoiceService -> Transition : validate(Criado → Enviado)
+Transition -> Status : setStatus(Enviado)
+InvoiceService -> Event : updateStatus(Enviado)
+
+== Pagar Fatura ==
+Usuário -> InvoiceService : pagarFatura()
+InvoiceService -> Transition : validate(Enviado → Pago)
+Transition -> Status : setStatus(Pago)
+InvoiceService -> Event : updateStatus(Pago)
+
+== Confirmar Pagamento ==
+Usuário -> InvoiceService : confirmarFatura()
+InvoiceService -> Transition : validate(Pago → Confirmado)
+Transition -> Status : setStatus(Confirmado)
+InvoiceService -> Event : updateStatus(Confirmado)
+
+== Cancelar Fatura ==
+Usuário -> InvoiceService : cancelarFatura()
+InvoiceService -> Transition : validate(Confirmado → Cancelado)
+Transition -> Status : setStatus(Cancelado)
+InvoiceService -> Event : updateStatus(Cancelado)
+
+== Reembolsar Fatura ==
+Usuário -> InvoiceService : reembolsarFatura()
+InvoiceService -> Transition : validate(Cancelado → Reembolsado)
+Transition -> Status : setStatus(Reembolsado)
+InvoiceService -> Event : updateStatus(Reembolsado)
+
+@enduml

@@ -1,0 +1,42 @@
+@startuml
+actor Usuário
+participant "DocumentService" as DocSvc
+participant "Transition" as Transition
+participant "Status" as Status
+participant "Event" as Event
+
+== Criar Rascunho ==
+Usuário -> DocSvc : criarDocumento()
+DocSvc -> Event : create()
+Event -> Status : setStatus(Rascunho)
+
+== Enviar para Revisão ==
+Usuário -> DocSvc : enviarRevisão()
+DocSvc -> Transition : validate(Rascunho → Em revisão)
+Transition -> Status : setStatus(Em revisão)
+DocSvc -> Event : updateStatus(Em revisão)
+
+== Aprovar ==
+Usuário -> DocSvc : aprovarDocumento()
+DocSvc -> Transition : validate(Em revisão → Aprovado)
+Transition -> Status : setStatus(Aprovado)
+DocSvc -> Event : updateStatus(Aprovado)
+
+== Publicar ==
+Usuário -> DocSvc : publicarDocumento()
+DocSvc -> Transition : validate(Aprovado → Publicado)
+Transition -> Status : setStatus(Publicado)
+DocSvc -> Event : updateStatus(Publicado)
+
+== Arquivar ==
+Usuário -> DocSvc : arquivarDocumento()
+DocSvc -> Transition : validate(Publicado → Arquivado)
+Transition -> Status : setStatus(Arquivado)
+DocSvc -> Event : updateStatus(Arquivado)
+
+== Rejeitar ==
+Usuário -> DocSvc : rejeitarDocumento()
+DocSvc -> Transition : validate(Em revisão → Rejeitado)
+Transition -> Status : setStatus(Rejeitado)
+DocSvc -> Event : updateStatus(Rejeitado)
+@enduml
