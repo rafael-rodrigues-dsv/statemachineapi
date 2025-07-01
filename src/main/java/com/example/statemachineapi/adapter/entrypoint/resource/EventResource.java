@@ -7,6 +7,7 @@ import com.example.statemachineapi.adapter.entrypoint.mapper.EventMapper;
 import com.example.statemachineapi.domain.model.EventModel;
 import com.example.statemachineapi.domain.model.StatusModel;
 import com.example.statemachineapi.domain.service.EventService;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -47,7 +48,7 @@ public class EventResource {
     }
 
     @GetMapping
-    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = EventResponseDTO.class)))
+    @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = EventResponseDTO.class))))
     public ResponseEntity<List<EventResponseDTO>> getAll(@PathVariable("stateMachineId") UUID stateMachineId) {
         List<EventResponseDTO> list = service.getAll(stateMachineId)
                 .stream()

@@ -3,6 +3,7 @@ package com.example.statemachineapi.domain.service.impl;
 import com.example.statemachineapi.domain.model.StateMachineModel;
 import com.example.statemachineapi.domain.model.TransitionModel;
 import com.example.statemachineapi.domain.service.StateMachineService;
+import com.example.statemachineapi.domain.service.StatusService;
 import com.example.statemachineapi.domain.service.TransitionService;
 import com.example.statemachineapi.repository.TransitionRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,10 @@ public class TransitionServiceImpl implements TransitionService {
                 .stream()
                 .filter(filter -> filter.getStateMachine().equals(stateMachine))
                 .toList();
+    }
+
+    @Override
+    public Boolean exists(UUID stateMachineId, UUID idSourceStatus, UUID idTargetStatus) {
+        return transitionRepository.existsTransition(stateMachineId, idSourceStatus, idTargetStatus);
     }
 }

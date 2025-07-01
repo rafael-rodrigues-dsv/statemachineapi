@@ -3,9 +3,11 @@ package com.example.statemachineapi.domain.service.impl;
 import com.example.statemachineapi.domain.model.EventModel;
 import com.example.statemachineapi.domain.model.StateMachineModel;
 import com.example.statemachineapi.domain.model.StatusModel;
+import com.example.statemachineapi.domain.service.EventFlowService;
 import com.example.statemachineapi.domain.service.EventService;
 import com.example.statemachineapi.domain.service.StateMachineService;
 import com.example.statemachineapi.domain.service.StatusService;
+import com.example.statemachineapi.domain.service.TransitionService;
 import com.example.statemachineapi.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,9 @@ public class EventServiceImpl implements EventService {
 
     private final StateMachineService stateMachineService;
     private final StatusService statusService;
+    private final EventFlowService eventFlowService;
     private final EventRepository eventRepository;
+//    private final TransitionService transitionService;
 
     @Override
     public EventModel create(UUID stateMachineId) {
@@ -32,8 +36,9 @@ public class EventServiceImpl implements EventService {
                 .stateMachine(stateMachine)
                 .status(initialStatus)
                 .build();
-
-        return eventRepository.save(eventInitialStatus);
+        EventModel eventModel = eventRepository.save(eventInitialStatus);
+        eventFlowService.save(eventModel);
+        return eventModel;
     }
 
 
@@ -60,9 +65,14 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventModel update(UUID stateMachineId, UUID id, EventModel model) {
-        EventModel eventToUpdate = eventRepository.findById(id).orElseThrow();
-        StatusModel status = statusService.getById(model.getStatus().getId());
-        eventToUpdate.setStatus(status);
-        return eventRepository.save(eventToUpdate);
+        EventModel eventToUpdate = getById(stateMachineId, id);
+        StatusModel newStatus = statusService.getById(model.getStatus().getId());
+//        if (!transitionService.exists(stateMachineId, eventToUpdate.getId(), newStatus.getId())) {
+//            new EntityNotFoundException("Invalid or not allowed transition from status " + eventToUpdate.getStatus().getName() + " to status " + newStatus.getName());
+//        }
+        eventToUpdate.setStatus(newStatus);
+        EventModel eventModel = eventRepository.save(eventToUpdate);
+        eventFlowService.save(eventModel);
+        return eventModel;
     }
 }

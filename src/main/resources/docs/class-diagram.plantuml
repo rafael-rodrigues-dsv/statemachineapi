@@ -7,6 +7,9 @@
     +Boolean isActive
     +List<Status> statuses
     +List<Transition> transitions
+    +Status getById(UUID id)
+    +Status disable(UUID id)
+    +List<StateMachine> getAll(UUID stateMachineId)
   }
 
   ' Status
@@ -15,6 +18,9 @@
     +StateMachine stateMachine
     +String name
     +Boolean isInitial
+    +Status getById(UUID id)
+    +Status getInitialStatus(UUID stateMachineId)
+    +List<Status> getAll(UUID stateMachineId)
   }
 
   ' Transition
@@ -23,6 +29,8 @@
     +StateMachine stateMachine
     +Status sourceStatus
     +Status targetStatus
+    +List<Transition> getAll(UUID stateMachineId)
+    +Transition exists(UUID stateMachineId, UUID idSourceStatus, UUID idTargetStatus)
   }
 
   ' Event
@@ -30,6 +38,10 @@
     +UUID id
     +StateMachine stateMachine
     +Status status
+    +Event create(UUID stateMachineId)
+    +List<Event> getAll(UUID stateMachineId)
+    +Event getById(UUID stateMachineId, UUID id)
+    +Event update(UUID stateMachineId, UUID id, Event model)
   }
 
   ' StateFlow
@@ -37,6 +49,7 @@
     +UUID id
     +Event event
     +LocalDateTime createdAt
+    +Event save(Event event)
     +List<EventFlow> getAll(UUID eventId)
   }
 
