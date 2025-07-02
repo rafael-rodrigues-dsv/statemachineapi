@@ -1,0 +1,53 @@
+@startuml
+scale 1.5
+skinparam StateAttributeIconSize 0
+
+' Define estados
+[*] --> Deslogado
+
+state "Deslogado" as Deslogado
+state "Logando" as Logando
+state "Logado" as Logado
+state "Sessão Expirada" as SessaoExpirada
+
+' Transições principais
+Deslogado -right-> Logando : iniciarLogin()
+Logando -right-> Logado : loginSuccess()
+Logado -down-> SessaoExpirada : sessionTimeout()
+SessaoExpirada --> Deslogado : reiniciarSessão()
+
+' Notas explicativas
+note top of Deslogado
+  Estado inicial:
+  Usuário não autenticado
+end note
+
+note top of Logando
+  Processo de
+  autenticação
+end note
+
+note top of Logado
+  Usuário autenticado
+  com sessão ativa
+end note
+
+note bottom of SessaoExpirada
+  Sessão inválida
+  por timeout
+end note
+
+' Formatação
+skinparam state {
+  BackgroundColor LightBlue
+  BorderColor DarkBlue
+  FontSize 14
+}
+
+' Ajuste do layout
+skinparam {
+  ArrowColor DarkBlue
+  ArrowThickness 2
+}
+
+@enduml

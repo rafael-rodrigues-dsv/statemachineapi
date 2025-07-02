@@ -1,0 +1,62 @@
+@startuml
+scale 1.5
+skinparam StateAttributeIconSize 0
+
+' Define estados
+[*] --> Saudacao
+
+state "Saudação" as Saudacao
+state "Pergunta" as Pergunta
+state "Resposta" as Resposta
+state "Ação Tomada" as AcaoTomada
+state "Encerrado" as Encerrado
+
+' Transições
+Saudacao -down-> Pergunta : askQuestion(text)
+Pergunta -down-> Resposta : deliverAnswer(answer)
+Resposta -down-> AcaoTomada : takeAction(cmd)
+AcaoTomada -down-> Encerrado : endChat()
+
+' Loop de continuidade
+Resposta -up-> Pergunta : askQuestion(text)
+
+' Notas explicativas
+note right of Saudacao
+  Estado inicial:
+  Início da conversa
+end note
+
+note right of Pergunta
+  Usuário faz uma
+  pergunta
+end note
+
+note right of Resposta
+  Chatbot fornece
+  resposta
+end note
+
+note right of AcaoTomada
+  Usuário executa
+  ação sugerida
+end note
+
+note right of Encerrado
+  Conversa
+  finalizada
+end note
+
+' Formatação
+skinparam state {
+  BackgroundColor LightBlue
+  BorderColor DarkBlue
+  FontSize 14
+}
+
+' Ajuste do layout
+skinparam {
+  ArrowColor DarkBlue
+  ArrowThickness 2
+}
+
+@enduml

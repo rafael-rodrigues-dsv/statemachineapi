@@ -1,0 +1,48 @@
+@startuml
+scale 1.5
+skinparam StateAttributeIconSize 0
+
+' Define estados
+[*] --> Agendado
+
+state "Agendado" as Agendado
+state "Check-in Aberto" as CheckinAberto
+state "Check-in Feito" as CheckinFeito
+state "Embarcado" as Embarcado
+state "Concluído" as Concluido
+state "Perdido" as Perdido
+
+' Transições verticais e laterais
+Agendado -down-> CheckinAberto : abrirCheckin()
+CheckinAberto -down-> CheckinFeito : fazerCheckin()
+CheckinFeito -down-> Embarcado : embarcar()
+Embarcado -down-> Concluido : concluirVoo()
+
+' Transição para voo perdido
+Embarcado -right-> Perdido : reportarPerdido()
+
+' Notas explicativas
+note right of Agendado
+  Estado inicial:
+  Voo agendado
+end note
+
+note right of Concluido
+  Estado final:
+  Voo realizado
+end note
+
+note right of Perdido
+  Estado final
+  alternativo:
+  Voo não realizado
+end note
+
+' Formatação
+skinparam state {
+  BackgroundColor LightGreen
+  BorderColor DarkGreen
+  FontSize 14
+}
+
+@enduml

@@ -1,0 +1,64 @@
+@startuml
+scale 1.5
+skinparam StateAttributeIconSize 0
+
+' Define estados
+[*] --> Etapa1
+
+state "Etapa 1\n(Dados Pessoais)" as Etapa1
+state "Etapa 2\n(Endereço)" as Etapa2
+state "Etapa 3\n(Confirmação)" as Etapa3
+state "Cancelado" as Cancelado
+
+' Transições principais
+Etapa1 -right-> Etapa2 : next()
+Etapa2 -left-> Etapa1 : back()
+Etapa2 -right-> Etapa3 : next()
+
+' Transições de cancelamento
+Etapa1 -down-> Cancelado : cancel()
+Etapa2 -down-> Cancelado : cancel()
+Etapa3 -down-> Cancelado : cancel()
+
+' Notas explicativas
+note top of Etapa1
+  Estado inicial:
+  Entrada de dados
+  pessoais
+end note
+
+note top of Etapa2
+  Informações
+  de endereço
+end note
+
+note top of Etapa3
+  Revisão e
+  confirmação
+end note
+
+note right of Cancelado
+  Estado final
+  alternativo:
+  Processo cancelado
+end note
+
+' Formatação
+skinparam state {
+  BackgroundColor LightGreen
+  BorderColor DarkGreen
+  FontSize 14
+}
+
+' Ajuste do layout
+skinparam {
+  ArrowColor DarkGreen
+  ArrowThickness 2
+}
+
+' Transições de cancelamento em vermelho
+skinparam arrow {
+  MessageAlign center
+}
+
+@enduml

@@ -1,0 +1,46 @@
+@startuml
+scale 1.5
+skinparam StateAttributeIconSize 0
+
+' Define estados
+[*] --> Rascunho
+
+state "Rascunho" as Rascunho
+state "Em Revisão" as EmRevisao
+state "Aprovado" as Aprovado
+state "Publicado" as Publicado
+state "Arquivado" as Arquivado
+state "Rejeitado" as Rejeitado
+
+' Transições verticais e laterais
+Rascunho -down-> EmRevisao : enviarRevisão()
+EmRevisao -down-> Aprovado : aprovarDocumento()
+Aprovado -down-> Publicado : publicarDocumento()
+Publicado -down-> Arquivado : arquivarDocumento()
+
+' Transição para rejeição
+EmRevisao -right-> Rejeitado : rejeitarDocumento()
+
+' Notas explicativas
+note right of Rascunho
+  Estado inicial:
+  Documento criado
+end note
+
+note right of Arquivado
+  Estado final
+end note
+
+note right of Rejeitado
+  Estado final
+  alternativo
+end note
+
+' Formatação
+skinparam state {
+  BackgroundColor LightBlue
+  BorderColor Gray
+  FontSize 14
+}
+
+@enduml

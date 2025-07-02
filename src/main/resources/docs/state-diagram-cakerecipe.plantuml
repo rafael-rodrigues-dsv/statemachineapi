@@ -1,0 +1,42 @@
+@startuml
+scale 1.5
+skinparam StateAttributeIconSize 0
+
+' Define estados
+[*] --> IngredientesSeparados
+
+state "Ingredientes Separados" as IngredientesSeparados
+state "Massa Misturada" as MassaMisturada
+state "Assando" as Assando
+state "Resfriando" as Resfriando
+state "Decorado" as Decorado
+state "Pronto" as Pronto
+
+' Transições verticais
+IngredientesSeparados -down-> MassaMisturada : misturarMassa()
+MassaMisturada -down-> Assando : assar()
+Assando -down-> Resfriando : resfriar()
+Resfriando -down-> Decorado : decorar()
+Decorado -down-> Pronto : servir()
+
+' Notas explicativas
+note right of IngredientesSeparados
+  Estado inicial:
+  Ingredientes separados
+  e conferidos
+end note
+
+note right of Pronto
+  Estado final:
+  Bolo pronto
+  para servir
+end note
+
+' Formatação
+skinparam state {
+  BackgroundColor LightYellow
+  BorderColor Brown
+  FontSize 14
+}
+
+@enduml

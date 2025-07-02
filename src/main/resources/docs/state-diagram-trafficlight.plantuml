@@ -1,0 +1,47 @@
+@startuml
+scale 1.5
+skinparam StateAttributeIconSize 0
+
+' Define estados
+[*] --> Verde
+
+' Definição dos estados com cores
+state Verde #98FB98
+state Amarelo #FFFF00
+state Vermelho #FF6B6B
+
+' Transições cíclicas
+Verde -right-> Amarelo : next()
+Amarelo -down-> Vermelho : next()
+Vermelho -up-> Verde : next()
+
+' Notas explicativas
+note left of Verde
+  Permitido
+  passar
+end note
+
+note right of Amarelo
+  Atenção:
+  Reduzir velocidade
+end note
+
+note left of Vermelho
+  Pare:
+  Fluxo interrompido
+end note
+
+' Ajuste do layout
+skinparam {
+  ArrowColor DarkGray
+  ArrowThickness 2
+  StateBorderColor DarkGray
+}
+
+' Ajuste das fontes
+skinparam state {
+  FontStyle bold
+  FontSize 14
+}
+
+@enduml

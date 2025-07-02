@@ -1,0 +1,138 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+
+' Definição de estilos
+skinparam usecase {
+  BackgroundColor LightBlue
+  BorderColor DarkBlue
+  ArrowColor DarkBlue
+  ActorBorderColor DarkBlue
+  ActorBackgroundColor LightBlue
+  FontSize 14
+}
+
+skinparam rectangle {
+  BackgroundColor WhiteSmoke
+  BorderColor Gray
+  RoundCorner 20
+}
+
+' Ator
+actor "Usuário" as user #LightBlue
+note right of user
+  Usuário do sistema com
+  permissão para gerenciar
+  máquinas de estado
+end note
+
+rectangle "Sistema de Máquina de Estados" {
+  ' Grupo 1 - Gerenciar Máquina de Estados
+  together {
+    usecase "Gerenciar Máquina de Estados" as UC1 #LightGreen
+    usecase "Criar Máquina de Estados" as UC1_1
+    usecase "Listar Máquinas de Estados" as UC1_2
+    usecase "Desativar Máquina de Estados" as UC1_3
+
+    note right of UC1
+      Funcionalidades principais
+      para gerenciamento do
+      ciclo de vida das
+      máquinas de estado
+    end note
+  }
+
+  ' Grupo 2 - Gerenciar Status
+  together {
+    usecase "Gerenciar Status" as UC2 #LightYellow
+    usecase "Criar Status" as UC2_1
+    usecase "Definir Status Inicial" as UC2_2
+    usecase "Listar Status" as UC2_3
+
+    note right of UC2
+      Gerenciamento dos estados
+      possíveis dentro de uma
+      máquina de estados
+    end note
+  }
+
+  ' Grupo 3 - Gerenciar Transições
+  together {
+    usecase "Gerenciar Transições" as UC3 #LightPink
+    usecase "Criar Transição" as UC3_1
+    usecase "Verificar Transição" as UC3_2
+    usecase "Listar Transições" as UC3_3
+
+    note right of UC3
+      Controle das regras de
+      transição entre os
+      diferentes estados
+    end note
+  }
+
+  ' Grupo 4 - Gerenciar Eventos
+  together {
+    usecase "Gerenciar Eventos" as UC4 #LightCyan
+    usecase "Criar Evento" as UC4_1
+    usecase "Atualizar Evento" as UC4_2
+    usecase "Consultar Evento" as UC4_3
+
+    note right of UC4
+      Gestão dos eventos que
+      disparam as transições
+      entre estados
+    end note
+  }
+
+  ' Grupo 5 - Gerenciar Fluxo de Eventos
+  together {
+    usecase "Gerenciar Fluxo de Eventos" as UC5 #LightGray
+    usecase "Registrar Fluxo" as UC5_1
+    usecase "Consultar Histórico" as UC5_2
+
+    note right of UC5
+      Acompanhamento e registro
+      do histórico de transições
+      e eventos
+    end note
+  }
+}
+
+' Relacionamentos principais
+user --> UC1
+user --> UC2
+user --> UC3
+user --> UC4
+user --> UC5
+
+' Relacionamentos de extensão
+UC1 <|-- UC1_1
+UC1 <|-- UC1_2
+UC1 <|-- UC1_3
+
+UC2 <|-- UC2_1
+UC2 <|-- UC2_2
+UC2 <|-- UC2_3
+
+UC3 <|-- UC3_1
+UC3 <|-- UC3_2
+UC3 <|-- UC3_3
+
+UC4 <|-- UC4_1
+UC4 <|-- UC4_2
+UC4 <|-- UC4_3
+
+UC5 <|-- UC5_1
+UC5 <|-- UC5_2
+
+' Legenda
+legend right
+  |= Cor |= Grupo |
+  |<#LightGreen>| Máquina de Estados |
+  |<#LightYellow>| Status |
+  |<#LightPink>| Transições |
+  |<#LightCyan>| Eventos |
+  |<#LightGray>| Fluxo de Eventos |
+endlegend
+
+@enduml

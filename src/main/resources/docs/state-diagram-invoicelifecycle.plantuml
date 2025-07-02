@@ -1,0 +1,66 @@
+@startuml
+scale 1.5
+skinparam StateAttributeIconSize 0
+
+' Define estados
+[*] --> Criado
+
+state "Criado" as Criado
+state "Enviado" as Enviado
+state "Pago" as Pago
+state "Confirmado" as Confirmado
+state "Cancelado" as Cancelado
+state "Reembolsado" as Reembolsado
+
+' Transições principais
+Criado -down-> Enviado : enviarFatura()
+Enviado -down-> Pago : pagarFatura()
+Pago -down-> Confirmado : confirmarFatura()
+Confirmado -right-> Cancelado : cancelarFatura()
+Cancelado -right-> Reembolsado : reembolsarFatura()
+
+' Notas explicativas
+note left of Criado
+  Estado inicial:
+  Fatura criada
+end note
+
+note left of Enviado
+  Fatura enviada
+  ao cliente
+end note
+
+note left of Pago
+  Pagamento
+  realizado
+end note
+
+note left of Confirmado
+  Pagamento
+  confirmado
+end note
+
+note right of Cancelado
+  Fatura
+  cancelada
+end note
+
+note right of Reembolsado
+  Estado final:
+  Valor reembolsado
+end note
+
+' Formatação
+skinparam state {
+  BackgroundColor LightGreen
+  BorderColor DarkGreen
+  FontSize 14
+}
+
+' Ajuste do layout
+skinparam {
+  ArrowColor DarkGreen
+  ArrowThickness 2
+}
+
+@enduml

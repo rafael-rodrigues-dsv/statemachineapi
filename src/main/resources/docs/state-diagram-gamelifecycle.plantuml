@@ -1,0 +1,54 @@
+@startuml
+scale 1.5
+skinparam StateAttributeIconSize 0
+
+' Define estados
+[*] --> Menu
+
+state "Menu" as Menu
+state "Jogando" as Jogando
+state "Pausado" as Pausado
+state "Game Over" as GameOver
+
+' Transições ajustadas para melhor visualização
+Menu -down-> Jogando : iniciarJogo()
+Jogando -right-> Pausado : pausarJogo()
+Pausado --> Jogando : iniciarJogo()
+Jogando -down-> GameOver : morrer()
+GameOver --> Menu : reiniciarJogo()
+
+' Notas explicativas
+note left of Menu
+  Estado inicial e
+  ponto de retorno
+end note
+
+note left of Jogando
+  Estado principal
+  do jogo
+end note
+
+note right of Pausado
+  Estado de
+  interrupção
+  temporária
+end note
+
+note left of GameOver
+  Fim de partida
+end note
+
+' Formatação
+skinparam state {
+  BackgroundColor LightPurple
+  BorderColor Purple
+  FontSize 14
+}
+
+' Ajuste do layout
+skinparam {
+  ArrowColor Purple
+  ArrowThickness 2
+}
+
+@enduml

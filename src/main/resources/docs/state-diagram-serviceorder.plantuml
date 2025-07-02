@@ -1,0 +1,71 @@
+@startuml
+scale 1.5
+skinparam StateAttributeIconSize 0
+
+' Define estados
+[*] --> Aberta
+
+state "Aberta" as Aberta
+state "Em Andamento" as EmAndamento
+state "Aguardando Peças" as AguardandoPecas
+state "Concluída" as Concluida
+state "Cancelada" as Cancelada
+
+' Posicionamento dos estados
+EmAndamento :
+AguardandoPecas :
+Cancelada :
+
+' Transições principais
+Aberta -down-> EmAndamento : iniciarOrdem()
+EmAndamento -down-> Concluida : concluirOrdem()
+
+' Transição para aguardando peças
+EmAndamento -right-> AguardandoPecas : solicitarPecas()
+AguardandoPecas --> EmAndamento : iniciarOrdem()
+
+' Transições de cancelamento
+Aberta -[#red]right-> Cancelada : cancelarOrdem()
+EmAndamento -[#red]up-> Cancelada : cancelarOrdem()
+AguardandoPecas -[#red]right-> Cancelada : cancelarOrdem()
+
+' Notas explicativas
+note left of Aberta
+  Estado inicial:
+  Ordem criada
+end note
+
+note left of EmAndamento
+  Trabalho em
+  execução
+end note
+
+note right of AguardandoPecas
+  Aguardando
+  peças necessárias
+end note
+
+note left of Concluida
+  Estado final:
+  Trabalho finalizado
+end note
+
+note right of Cancelada
+  Estado final
+  alternativo
+end note
+
+' Formatação
+skinparam state {
+  BackgroundColor LightBlue
+  BorderColor DarkBlue
+  FontSize 14
+}
+
+' Ajuste do layout
+skinparam {
+  ArrowColor DarkBlue
+  ArrowThickness 2
+}
+
+@enduml
